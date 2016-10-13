@@ -23,5 +23,5 @@ app.get(bnetPath, passport.authenticate('bnet'))
 app.get(callbackPath, passport.authenticate('bnet', { failureRedirect }),
   (req, res) => res.redirect(successRedirect))
 
-app.listen(3548)
+app.listen(3548, () => console.log('Server up, listening to 3548'))
 
