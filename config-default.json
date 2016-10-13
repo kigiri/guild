@@ -1,0 +1,9 @@
+{
+  "clientID": "bnet app id",
+  "clientSecret": "bnet app secret",
+  "domain": "yourdomain.com/",
+  "bnetPath": "/auth/bnet/",
+  "failureRedirect": "/",
+  "successRedirect": "/"
+}
+
