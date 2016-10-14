@@ -12,10 +12,6 @@ const express = require('express')
 const session = require('express-session')
 const FileStore = require('session-file-store')(session)
 const BnetStrategy = require('passport-bnet').Strategy
-// const letsencrypt = require('letsencrypt-express')
-// const http = require('http')
-// const https = require('https')
-// const redirectHttps = require('redirect-https')
 
 const wesh = _ => (console.log(_), _)
 
@@ -46,7 +42,6 @@ app.get(callbackPath, passport.authenticate('bnet', { failureRedirect }),
   (req, res) => res.redirect(successRedirect))
 
 app.get('/', function(req, res) {
-  console.log(req.session)
   if (req.isAuthenticated()) {
     var output = '<h1>Express OAuth Test</h1>'+ req.user.id +'<br>'
     if (req.user.battletag) {
@@ -66,11 +61,6 @@ app.get('/logout', function(req, res) {
   res.redirect('/')
 })
 
-
-// http.createServer(lex.middleware(requireHttps)()).listen(80)
-
-// https.createServer(lex.httpsOptions, lex.middleware(
-app.listen(3548, () =>
-  console.log('Server up, listening to 3548'))
+app.listen(3548, () => console.log('Server up, listening to 3548'))
 
 
