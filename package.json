@@ -11,7 +11,9 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.14.0",
+    "express-session": "^1.14.1",
     "passport": "^0.3.2",
-    "passport-bnet": "^1.2.1"
+    "passport-bnet": "^1.2.1",
+    "session-file-store": "^0.2.2"
   }
 }

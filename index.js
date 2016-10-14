@@ -9,14 +9,36 @@ const {
 
 const passport = require('passport')
 const express = require('express')
+const session = require('express-session')
+const FileStore = require('session-file-store')(session)
 const BnetStrategy = require('passport-bnet').Strategy
+// const letsencrypt = require('letsencrypt-express')
+// const http = require('http')
+// const https = require('https')
+// const redirectHttps = require('redirect-https')
+
+const wesh = _ => (console.log(_), _)
 
 const callbackPath = `${bnetPath}callback`
 const callbackURL = `https://${domain}${callbackPath}`
-
 const app = express()
 
-passport.use(new BnetStrategy({ clientID, clientSecret, callbackURL },
+app.use(session({
+  store: new FileStore({ encrypt: false }),
+  resave: false,
+  saveUninitialized: true,
+  secret: 'waliyaan is a pyronmane',
+}))
+
+app.use(passport.initialize())
+app.use(passport.session())
+
+const passUser = (user, done) => done(null, user)
+
+passport.serializeUser(passUser)
+passport.deserializeUser(passUser)
+
+passport.use(new BnetStrategy({ clientID, clientSecret, callbackURL, scope: 'wow.profile' },
   (accessToken, refreshToken, profile, done) => done(null, profile)))
 
 app.get(bnetPath, passport.authenticate('bnet'))
@@ -24,6 +46,7 @@ app.get(callbackPath, passport.authenticate('bnet', { failureRedirect }),
   (req, res) => res.redirect(successRedirect))
 
 app.get('/', function(req, res) {
+  console.log(req.session)
   if (req.isAuthenticated()) {
     var output = '<h1>Express OAuth Test</h1>'+ req.user.id +'<br>'
     if (req.user.battletag) {
@@ -43,5 +66,11 @@ app.get('/logout', function(req, res) {
   res.redirect('/')
 })
 
-app.listen(3548, () => console.log('Server up, listening to 3548'))
+
+// http.createServer(lex.middleware(requireHttps)()).listen(80)
+
+// https.createServer(lex.httpsOptions, lex.middleware(
+app.listen(3548, () =>
+  console.log('Server up, listening to 3548'))
+
 
