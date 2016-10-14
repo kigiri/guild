@@ -24,6 +24,7 @@ const defaultHtml = `<!DOCTYPE html><html><head><meta charset="utf-8"><link rel=
 const zDefaultHtml = zlib.gzipSync(defaultHtml, {
   level: zlib.Z_BEST_COMPRESSION,
 })
+const zHtmlLen = Buffer.byteLength(zDefaultHtml)
 
 const app = express()
 
@@ -59,7 +60,11 @@ app.get('/', function(req, res) {
     res.send(output)
   } else {
     if (/req accept gzip/) {
-      res.set('Content-Encoding', 'gzip')
+      res.set({
+        'Content-Length': zHtmlLen,
+        'Content-Type': 'text/html',
+        'Content-Encoding': 'gzip',
+      })
       res.send(zDefaultHtml)
     } else {
       res.send(defaultHtml)
